@@ -136,90 +136,91 @@ def player_stats_tab(mytab):
             'Selecione um jogador', all_players, index=None)
 
         if st.button('Gerar Perfil do Jogador'):
-            with st.spinner('Gerando um perfil impecável...'):
-                player_events = events[events['player'] == selected_player]
-                stats = {
-                    "Jogador": selected_player,
-                    "Passes Completos": player_events[
-                        (player_events['type'] == 'Pass') & (
-                            player_events['pass_outcome'].isna())
-                    ].shape[0],
-                    "Tentativas de Passes": player_events[player_events['type'] == 'Pass'].shape[0],
-                    "Chutes": player_events[player_events['type'] == 'Shot'].shape[0],
-                    "Chutes no Alvo": player_events[
-                        (player_events['type'] == 'Shot') & (
-                            player_events['shot_outcome'] == 'On Target')
-                    ].shape[0],
-                    "Faltas Cometidas": player_events[player_events['type'] == 'Foul Committed'].shape[0],
-                    "Faltas Sofridas": player_events[player_events['type'] == 'Foul Won'].shape[0],
-                    "Contestações de Bola": player_events[player_events['type'] == 'Tackle'].shape[0],
-                    "Interceptações": player_events[player_events['type'] == 'Interception'].shape[0],
-                    "Dribles Completados": player_events[
-                        (player_events['type'] == 'Dribble') & (
-                            player_events['dribble_outcome'] == 'Complete')
-                    ].shape[0],
-                    "Tentativas de Dribles": player_events[player_events['type'] == 'Dribble'].shape[0],
-                    "Gols (exceto pênaltis)": player_events[
-                        (player_events['type'] == 'Shot') &
-                        (player_events['shot_outcome'] == 'Goal') &
-                        (player_events['shot_type'] != 'Penalty')
-                    ].shape[0],
-                    "Gols de Pênalti": player_events[
-                        (player_events['type'] == 'Shot') &
-                        (player_events['shot_outcome'] == 'Goal') &
-                        (player_events['shot_type'] == 'Penalty')
-                    ].shape[0],
-                    "Recuperações de Bola": player_events[player_events['type'] == 'Ball Recovery'].shape[0],
-                    "Bloqueios": player_events[player_events['type'] == 'Block'].shape[0],
-                    "Paralisações por Lesão": player_events[player_events['type'] == 'Injury Stoppage'].shape[0],
-                    "Perda de Controle": player_events[player_events['type'] == 'Miscontrol'].shape[0],
-                    # Safeguard against missing 'foul_committed_card' column
-                    "Cartões Amarelos": player_events[
-                        (player_events['type'] == 'Foul Committed') &
-                        (player_events['foul_committed_card'].eq(
-                            'Yellow Card') if 'foul_committed_card' in player_events else False)
-                    ].shape[0],
-                    "Cartões Vermelhos": player_events[
-                        (player_events['type'] == 'Foul Committed') &
-                        (player_events['foul_committed_card'].eq(
-                            'Red Card') if 'foul_committed_card' in player_events else False)
-                    ].shape[0]
-                }
+            if selected_player is not None:
+                with st.spinner('Gerando um perfil impecável...'):
+                    player_events = events[events['player'] == selected_player]
+                    stats = {
+                        "Jogador": selected_player,
+                        "Passes Completos": player_events[
+                            (player_events['type'] == 'Pass') & (
+                                player_events['pass_outcome'].isna())
+                        ].shape[0],
+                        "Tentativas de Passes": player_events[player_events['type'] == 'Pass'].shape[0],
+                        "Chutes": player_events[player_events['type'] == 'Shot'].shape[0],
+                        "Chutes no Alvo": player_events[
+                            (player_events['type'] == 'Shot') & (
+                                player_events['shot_outcome'] == 'On Target')
+                        ].shape[0],
+                        "Faltas Cometidas": player_events[player_events['type'] == 'Foul Committed'].shape[0],
+                        "Faltas Sofridas": player_events[player_events['type'] == 'Foul Won'].shape[0],
+                        "Contestações de Bola": player_events[player_events['type'] == 'Tackle'].shape[0],
+                        "Interceptações": player_events[player_events['type'] == 'Interception'].shape[0],
+                        "Dribles Completados": player_events[
+                            (player_events['type'] == 'Dribble') & (
+                                player_events['dribble_outcome'] == 'Complete')
+                        ].shape[0],
+                        "Tentativas de Dribles": player_events[player_events['type'] == 'Dribble'].shape[0],
+                        "Gols (exceto pênaltis)": player_events[
+                            (player_events['type'] == 'Shot') &
+                            (player_events['shot_outcome'] == 'Goal') &
+                            (player_events['shot_type'] != 'Penalty')
+                        ].shape[0],
+                        "Gols de Pênalti": player_events[
+                            (player_events['type'] == 'Shot') &
+                            (player_events['shot_outcome'] == 'Goal') &
+                            (player_events['shot_type'] == 'Penalty')
+                        ].shape[0],
+                        "Recuperações de Bola": player_events[player_events['type'] == 'Ball Recovery'].shape[0],
+                        "Bloqueios": player_events[player_events['type'] == 'Block'].shape[0],
+                        "Paralisações por Lesão": player_events[player_events['type'] == 'Injury Stoppage'].shape[0],
+                        "Perda de Controle": player_events[player_events['type'] == 'Miscontrol'].shape[0],
+                        # Safeguard against missing 'foul_committed_card' column
+                        "Cartões Amarelos": player_events[
+                            (player_events['type'] == 'Foul Committed') &
+                            (player_events['foul_committed_card'].eq(
+                                'Yellow Card') if 'foul_committed_card' in player_events else False)
+                        ].shape[0],
+                        "Cartões Vermelhos": player_events[
+                            (player_events['type'] == 'Foul Committed') &
+                            (player_events['foul_committed_card'].eq(
+                                'Red Card') if 'foul_committed_card' in player_events else False)
+                        ].shape[0]
+                    }
 
-                json_player_stats_yaml = yaml_conversion(stats)
+                    json_player_stats_yaml = yaml_conversion(stats)
 
-                events = GetMatchStats(match_id=match_id).get_events()
+                    events = GetMatchStats(match_id=match_id).get_events()
 
-                events_yaml = yaml_conversion(events)
+                    events_yaml = yaml_conversion(events)
 
-                prompt = (f'''
-                Elabore um resumo envolvente e informativo do jogador selecionado, em português, através do conteúdo dos YAML fornecidos:
-                        - Player_stats: {json_player_stats_yaml} - contêm informações sobre as estatísticas do jogador na partida. Como: passes completos,
-                        tentativas de passes, chutes, chutes no alvo, faltas cometidas, faltas sofridas, contestações de bola, interceptações, dribles completados,
-                        tentativas de dribles, gols (exceto pênaltis), gols de pênalti, recuperações de bola, bloqueios, cartões amarelos, cartões vermelhos,
-                        paralisações por lesão, perda de controle.
-                        - Events: {events_yaml} - contêm informações sobre os eventos gerais da partida, envolvendo todos os jogadores.
-                        Com a combinação das estatísticas do jogador e dos eventos da partida, você irá traçar o perfil do jogador na partida.
-                        Utilize apenas as informações fornecidas, sem fazer suposições ou preencher lacunas, como por exemplo adivinhar a ordem dos eventos da partida.
-                        Não use termos como de acordo com os dados que me foram fornecidos, ou algo do tipo.
-                        O objetivo é criar um texto cativante e acessível, destacando os principais acontecimentos e aspectos interessantes do jogador na partida.
-                        O resumo deve ter no máximo 250 palavras e ser escrito como um comentarista esportivo.
-                ''')
+                    prompt = (f'''
+                    Elabore um resumo envolvente e informativo do jogador selecionado, em português, através do conteúdo dos YAML fornecidos:
+                            - Player_stats: {json_player_stats_yaml} - contêm informações sobre as estatísticas do jogador na partida. Como: passes completos,
+                            tentativas de passes, chutes, chutes no alvo, faltas cometidas, faltas sofridas, contestações de bola, interceptações, dribles completados,
+                            tentativas de dribles, gols (exceto pênaltis), gols de pênalti, recuperações de bola, bloqueios, cartões amarelos, cartões vermelhos,
+                            paralisações por lesão, perda de controle.
+                            - Events: {events_yaml} - contêm informações sobre os eventos gerais da partida, envolvendo todos os jogadores.
+                            Com a combinação das estatísticas do jogador e dos eventos da partida, você irá traçar o perfil do jogador na partida.
+                            Utilize apenas as informações fornecidas, sem fazer suposições ou preencher lacunas, como por exemplo adivinhar a ordem dos eventos da partida.
+                            Não use termos como de acordo com os dados que me foram fornecidos, ou algo do tipo.
+                            O objetivo é criar um texto cativante e acessível, destacando os principais acontecimentos e aspectos interessantes do jogador na partida.
+                            O resumo deve ter no máximo 250 palavras e ser escrito como um comentarista esportivo.
+                    ''')
 
-                response = client.models.generate_content(
-                    model='gemini-1.5-flash',
-                    contents=prompt,
-                    config=types.GenerateContentConfig(
-                        temperature=0.3,
-                        max_output_tokens=500,
-                        top_p=0.95,
-                        top_k=40
-                    ))
+                    response = client.models.generate_content(
+                        model='gemini-1.5-flash',
+                        contents=prompt,
+                        config=types.GenerateContentConfig(
+                            temperature=0.3,
+                            max_output_tokens=500,
+                            top_p=0.95,
+                            top_k=40
+                        ))
 
-                response = response.text
+                    response = response.text
 
-                st.markdown(
-                    f'<div style="text-align: justify;">{response}</div>', unsafe_allow_html=True)
+                    st.markdown(
+                        f'<div style="text-align: justify;">{response}</div>', unsafe_allow_html=True)
 
 
 def pass_map_tab(mytab):

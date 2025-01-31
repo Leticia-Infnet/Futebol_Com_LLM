@@ -19,13 +19,13 @@ Você pode acessar a aplicação clicando neste [link](https://dashboard-futebol
 Clone o projeto
 
 ```
-  git clone https://github.com/Leticia-Infnet/leticia_abreu_DR3_AT_parte1.git
+  git clone https://github.com/Leticia-Infnet/Futebol_Com_LLM.git
 ```
 
 Entre no diretório do projeto
 
 ```
-  cd leticia_abreu_DR3_AT_parte1
+  cd Futebol_Com_LLM
 ```
 
 Instale as dependências
